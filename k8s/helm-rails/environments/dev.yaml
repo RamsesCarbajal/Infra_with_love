@@ -1,0 +1,5 @@
+replicaCount: 2
+containerPort: 3000
+image:
+    repository: 533267296286.dkr.ecr.us-east-2.amazonaws.com/rails-repo-dev
+    tag: latest
