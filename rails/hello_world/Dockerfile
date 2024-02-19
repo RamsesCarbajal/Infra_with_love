@@ -8,7 +8,7 @@ FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 WORKDIR /rails
 
 # Set production environment
-ENV RAILS_ENV="production" \
+ENV RAILS_ENV="development" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
@@ -39,6 +39,8 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
+
+ENV SECRET_KEY_BASE=d1e224d44a3d39e0cbf04730416425677a47b59006e111137d79865b94be6e2dfc360183ce615575e752c421787c337a2470e7540b81d0cf4976dcb467b8ad5d
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
