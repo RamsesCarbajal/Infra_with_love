@@ -19,6 +19,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "CUSTOM_ENV_LOVE"
+              value: {{ .Values.customEnvVar }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}

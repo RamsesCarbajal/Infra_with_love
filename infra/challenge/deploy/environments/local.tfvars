@@ -1,2 +1,2 @@
-environment = "dev"
+environment = "local"
 environment-context = "minikube"
