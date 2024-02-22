@@ -1,0 +1,697 @@
+
+          + effect  = "Allow"
+
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "sts.amazonaws.com",
+                ]
+              + variable = (known after apply)
+            }
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "system:serviceaccount:default:rails",
+                ]
+              + variable = (known after apply)
+            }
+
+          + principals {
+              + identifiers = [
+                  + (known after apply),
+                ]
+              + type        = "Federated"
+            }
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_alb_listener.https[0] will be created
+  + resource "aws_alb_listener" "https" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + load_balancer_arn = (known after apply)
+      + port              = 80
+      + protocol          = "HTTP"
+      + ssl_policy        = (known after apply)
+      + tags_all          = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_autoscaling_attachment.locust-attach[0] will be created
+  + resource "aws_autoscaling_attachment" "locust-attach" {
+      + autoscaling_group_name = (known after apply)
+      + id                     = (known after apply)
+      + lb_target_group_arn    = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_eks_cluster.eks-cluster will be created
+  + resource "aws_eks_cluster" "eks-cluster" {
+      + arn                   = (known after apply)
+      + certificate_authority = (known after apply)
+      + cluster_id            = (known after apply)
+      + created_at            = (known after apply)
+      + endpoint              = (known after apply)
+      + id                    = (known after apply)
+      + identity              = (known after apply)
+      + name                  = "lovevery-devops"
+      + platform_version      = (known after apply)
+      + role_arn              = (known after apply)
+      + status                = (known after apply)
+      + tags                  = {
+          + "project" = "lovevery-devops"
+        }
+      + tags_all              = {
+          + "project" = "lovevery-devops"
+        }
+      + version               = "1.27"
+
+      + kubernetes_network_config {
+          + ip_family         = "ipv4"
+          + service_ipv4_cidr = "172.20.0.0/16"
+          + service_ipv6_cidr = (known after apply)
+        }
+
+      + vpc_config {
+          + cluster_security_group_id = (known after apply)
+          + endpoint_private_access   = true
+          + endpoint_public_access    = false
+          + public_access_cidrs       = (known after apply)
+          + security_group_ids        = (known after apply)
+          + subnet_ids                = [
+              + "subnet-07a26df2b7748218a",
+              + "subnet-0c980bb22ec8834c9",
+            ]
+          + vpc_id                    = (known after apply)
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_eks_node_group.worker-node-custom-group will be created
+  + resource "aws_eks_node_group" "worker-node-custom-group" {
+      + ami_type               = (known after apply)
+      + arn                    = (known after apply)
+      + capacity_type          = (known after apply)
+      + cluster_name           = "lovevery-devops"
+      + disk_size              = (known after apply)
+      + id                     = (known after apply)
+      + instance_types         = (known after apply)
+      + node_group_name        = "lovevery-devops-general-node-group-custom"
+      + node_group_name_prefix = (known after apply)
+      + node_role_arn          = (known after apply)
+      + release_version        = (known after apply)
+      + resources              = (known after apply)
+      + status                 = (known after apply)
+      + subnet_ids             = [
+          + "subnet-07a26df2b7748218a",
+          + "subnet-0c980bb22ec8834c9",
+        ]
+      + tags_all               = (known after apply)
+      + version                = (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = "lovevery-devops-lauch-template"
+          + version = (known after apply)
+        }
+
+      + scaling_config {
+          + desired_size = 2
+          + max_size     = 2
+          + min_size     = 2
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_openid_connect_provider.cluster[0] will be created
+  + resource "aws_iam_openid_connect_provider" "cluster" {
+      + arn             = (known after apply)
+      + client_id_list  = [
+          + "sts.amazonaws.com",
+        ]
+      + id              = (known after apply)
+      + tags            = {
+          + "project" = "lovevery-devops"
+        }
+      + tags_all        = {
+          + "project" = "lovevery-devops"
+        }
+      + thumbprint_list = [
+          + "50879ea7f7c29dd615269e559fb061b46bdd3dbe",
+        ]
+      + url             = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role.eks-iam-role will be created
+  + resource "aws_iam_role" "eks-iam-role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "eks.amazonaws.com"
+                        }
+                      + Sid       = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "lovevery-devops-eks-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + role_last_used        = (known after apply)
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role.pod-role will be created
+  + resource "aws_iam_role" "pod-role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = (known after apply)
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "lovevery-devops-pod-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + role_last_used        = (known after apply)
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role.worker-nodes-role will be created
+  + resource "aws_iam_role" "worker-nodes-role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ec2.amazonaws.com"
+                        }
+                      + Sid       = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "lovevery-devops-eks--nodes-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + role_last_used        = (known after apply)
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.cust-pod-role will be created
+  + resource "aws_iam_role_policy" "cust-pod-role" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-cust-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "elasticloadbalancing:*",
+                          + "autoscaling:*",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.ec2-pod-role will be created
+  + resource "aws_iam_role_policy" "ec2-pod-role" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-ec2-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "ec2:*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.eks-pod-role will be created
+  + resource "aws_iam_role_policy" "eks-pod-role" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-eks-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "eks:*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.iam-pod-role will be created
+  + resource "aws_iam_role_policy" "iam-pod-role" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-iam-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "iam:*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.node-custom-policy will be created
+  + resource "aws_iam_role_policy" "node-custom-policy" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-s3-node-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "secretsmanager:*",
+                          + "s3:*",
+                          + "iam:*",
+                          + "ec2:*",
+                          + "dynamodb:*",
+                          + "autoscaling:*",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.pod-dynamodb-policy will be created
+  + resource "aws_iam_role_policy" "pod-dynamodb-policy" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-dynamodb-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "dynamodb:*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy.pod-s3-policy will be created
+  + resource "aws_iam_role_policy" "pod-s3-policy" {
+      + id     = (known after apply)
+      + name   = "lovevery-devops-s3-pod-role"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "s3:*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      + role       = "lovevery-devops-eks--nodes-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly-EKS will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly-EKS" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      + role       = "lovevery-devops-eks-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEFSCSIDriverPolicy will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEFSCSIDriverPolicy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+      + role       = "lovevery-devops-eks--nodes-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEKSClusterPolicy will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+      + role       = "lovevery-devops-eks-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+      + role       = "lovevery-devops-eks--nodes-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy will be created
+  + resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+      + role       = "lovevery-devops-eks--nodes-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_iam_role_policy_attachment.EC2InstanceProfileForImageBuilderECRContainerBuilds will be created
+  + resource "aws_iam_role_policy_attachment" "EC2InstanceProfileForImageBuilderECRContainerBuilds" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
+      + role       = "lovevery-devops-eks--nodes-role"
+    }
+
+  # module.insulet-eks["lovevery"].aws_launch_template.eks_cluster_tainted_worker_node_launch_config will be created
+  + resource "aws_launch_template" "eks_cluster_tainted_worker_node_launch_config" {
+      + arn             = (known after apply)
+      + default_version = (known after apply)
+      + id              = (known after apply)
+      + image_id        = "ami-0a6f1a80e716e19b1"
+      + instance_type   = "t3.medium"
+      + latest_version  = (known after apply)
+      + name            = "lovevery-devops-lauch-template"
+      + name_prefix     = (known after apply)
+      + tags_all        = (known after apply)
+      + user_data       = (known after apply)
+
+      + block_device_mappings {
+          + device_name = "/dev/xvda"
+
+          + ebs {
+              + iops        = (known after apply)
+              + throughput  = (known after apply)
+              + volume_size = 20
+              + volume_type = "gp2"
+            }
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = 2
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + network_interfaces {
+          + delete_on_termination = "true"
+          + device_index          = 0
+          + security_groups       = (known after apply)
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "Name"    = "locust-general-nodes"
+              + "project" = "eks-lovevery-devops"
+            }
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_lb.lovevery-alb[0] will be created
+  + resource "aws_lb" "lovevery-alb" {
+      + arn                                         = (known after apply)
+      + arn_suffix                                  = (known after apply)
+      + desync_mitigation_mode                      = "defensive"
+      + dns_name                                    = (known after apply)
+      + drop_invalid_header_fields                  = false
+      + enable_deletion_protection                  = false
+      + enable_http2                                = true
+      + enable_tls_version_and_cipher_suite_headers = false
+      + enable_waf_fail_open                        = false
+      + enable_xff_client_port                      = false
+      + id                                          = (known after apply)
+      + idle_timeout                                = 60
+      + internal                                    = false
+      + ip_address_type                             = (known after apply)
+      + load_balancer_type                          = "application"
+      + name                                        = (known after apply)
+      + preserve_host_header                        = false
+      + security_groups                             = (known after apply)
+      + subnets                                     = [
+          + "subnet-035b5fa5aa75c0f1f",
+          + "subnet-0d3ab5aeb9b598477",
+        ]
+      + tags_all                                    = (known after apply)
+      + vpc_id                                      = (known after apply)
+      + xff_header_processing_mode                  = "append"
+      + zone_id                                     = (known after apply)
+
+      + access_logs {
+          + bucket  = (known after apply)
+          + enabled = true
+          + prefix  = "lovevery-devops-alb-poc"
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_lb_target_group.locust-tg[0] will be created
+  + resource "aws_lb_target_group" "locust-tg" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = false
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "lovevery-devops-tg"
+      + port                               = 30010
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = (known after apply)
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-051a9fd851efc651d"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 3
+          + interval            = 30
+          + matcher             = (known after apply)
+          + path                = "/"
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = (known after apply)
+          + unhealthy_threshold = 3
+        }
+    }
+
+  # module.insulet-eks["lovevery"].aws_s3_bucket.alb_bucket[0] will be created
+  + resource "aws_s3_bucket" "alb_bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "lovevery-devops-alb-logs"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = true
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Name" = "lovevery-devops-alb-logs"
+        }
+      + tags_all                    = {
+          + "Name" = "lovevery-devops-alb-logs"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_s3_bucket_policy.alb_logs[0] will be created
+  + resource "aws_s3_bucket_policy" "alb_logs" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + policy = (known after apply)
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group.alb_sg[0] will be created
+  + resource "aws_security_group" "alb_sg" {
+      + arn                    = (known after apply)
+      + description            = "allow traffic to loadbalancer"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "lovevery-devops-eks-poc"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "project" = "eks-lovevery-devops"
+        }
+      + tags_all               = {
+          + "project" = "eks-lovevery-devops"
+        }
+      + vpc_id                 = "vpc-051a9fd851efc651d"
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group.eks-worker_sg will be created
+  + resource "aws_security_group" "eks-worker_sg" {
+      + arn                    = (known after apply)
+      + description            = "allow traffic to eks-worker"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "lovevery-devops-eks-worker"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name"    = "lovevery-devops-eks-worker"
+          + "project" = "eks-lovevery-devops"
+        }
+      + tags_all               = {
+          + "Name"    = "lovevery-devops-eks-worker"
+          + "project" = "eks-lovevery-devops"
+        }
+      + vpc_id                 = "vpc-051a9fd851efc651d"
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group_rule.eks-node_sg_income_http[0] will be created
+  + resource "aws_security_group_rule" "eks-node_sg_income_http" {
+      + cidr_blocks              = [
+          + "192.150.50.100/32",
+        ]
+      + from_port                = 80
+      + id                       = (known after apply)
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + security_group_rule_id   = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 80
+      + type                     = "ingress"
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group_rule.eks-node_sg_outcome[0] will be created
+  + resource "aws_security_group_rule" "eks-node_sg_outcome" {
+      + cidr_blocks              = [
+          + "0.0.0.0/0",
+        ]
+      + from_port                = 0
+      + id                       = (known after apply)
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + security_group_rule_id   = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 65535
+      + type                     = "egress"
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group_rule.eks-worker_sg_income_all will be created
+  + resource "aws_security_group_rule" "eks-worker_sg_income_all" {
+      + cidr_blocks              = [
+          + "0.0.0.0/0",
+        ]
+      + from_port                = 0
+      + id                       = (known after apply)
+      + protocol                 = "-1"
+      + security_group_id        = (known after apply)
+      + security_group_rule_id   = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 65535
+      + type                     = "ingress"
+    }
+
+  # module.insulet-eks["lovevery"].aws_security_group_rule.eks-worker_sg_outcome will be created
+  + resource "aws_security_group_rule" "eks-worker_sg_outcome" {
+      + cidr_blocks              = [
+          + "0.0.0.0/0",
+        ]
+      + from_port                = 0
+      + id                       = (known after apply)
+      + protocol                 = "-1"
+      + security_group_id        = (known after apply)
+      + security_group_rule_id   = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 65535
+      + type                     = "egress"
+    }
+
+  # module.insulet-eks["lovevery"].random_integer.random_alb_number[0] will be created
+  + resource "random_integer" "random_alb_number" {
+      + id     = (known after apply)
+      + max    = 500000
+      + min    = 1
+      + result = (known after apply)
+    }
+
+Plan: 34 to add, 0 to change, 0 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: eks.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "eks.tfplan"
