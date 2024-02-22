@@ -344,4 +344,8 @@ Events:                   <none>
 
 ## Additional Notes
 
-a VPC project and VPC module were added in this project thinking it could be necessary deploy this rails app into a live EKS cluster, i can do it but could you help to schedule a time window to turn on the cluster an when can be turned off?
+a VPC and EKS cluster project were added in this project, i thought it could be necessary deploy this rails app into a live EKS cluster, i can do it but could you help to schedule a time window to turn on the cluster an when can be turned off?
+- The vpc, subnets and all the network configuration was deployed to a AWS account
+![vpc](images/vpc.png)
+![subnets](images/subnets.png)
+- the EKS plan output is into `infra/challenge/eks/output-plan.txt` file
