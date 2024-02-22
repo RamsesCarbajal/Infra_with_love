@@ -1,3 +1,17 @@
+# Table of Contents
+1. [Project Structure](#project-structure)
+2. [rails](#rails)
+3. [k8s](#k8s)
+4. [infra](#infra)
+5. [ecr](#ecr)
+6. [build](#build)
+7. [deploy](#deploy)
+8. [Manage Multiple Environments and secrets](#mult-env)
+9. [Tests](#tests)
+10. [Additional Notes](#additional)
+
+
+
 # Enviroment
 - use asdf as terraform version manager
 - terraform version 1.7.3
@@ -7,7 +21,7 @@
 - ruby 3.1.2p20 
 
 
-# Project Structure
+# 1. Project Structure <a name="project-structure"></a>
 ```bash
 .
 ├── README.md
@@ -23,6 +37,7 @@
 │   │   │   └── variables.tf
 │   │   ├── deploy
 │   │   │   ├── backend.tf
+│   │   │   ├── deploy.tfplan
 │   │   │   ├── environments
 │   │   │   │   ├── dev.tfvars
 │   │   │   │   ├── dev2.tfvars
@@ -38,20 +53,55 @@
 │   │   │   ├── main.tf
 │   │   │   ├── provider.tf
 │   │   │   └── variables.tf
-├── k8s
-│   └── helm-rails
-│       ├── Chart.yaml
-│       ├── README.md
-│       ├── charts
-│       ├── environments
-│       │   ├── dev.yaml
-│       │   └── local.yaml
-│       ├── templates
-│       │   ├── NOTES.txt
-│       │   ├── _helpers.tpl
-│       │   ├── deployment.yaml
-│       │   └── service.yaml
-│       └── values.yaml
+│   │   ├── eks
+│   │   │   ├── README.md
+│   │   │   ├── backend.tf
+│   │   │   ├── data.tf
+│   │   │   ├── eks.tfplan
+│   │   │   ├── environments
+│   │   │   │   └── dev.tfvars
+│   │   │   ├── main.tf
+│   │   │   ├── output-plan.txt
+│   │   │   ├── output.tf
+│   │   │   ├── provider.tf
+│   │   │   └── variables.tf
+│   │   └── vpc
+│   │       ├── backend.tf
+│   │       ├── environments
+│   │       │   └── dev.tfvars
+│   │       ├── main.tf
+│   │       ├── provider.tf
+│   │       ├── variables.tf
+│   │       └── vpc.tfplan
+│   └── modules
+│       ├── eks
+│       │   ├── asg.tf
+│       │   ├── eks.tf
+│       │   ├── load_balancer.tf
+│       │   ├── locals.tf
+│       │   ├── output.tf
+│       │   ├── roles.tf
+│       │   ├── sg.tf
+│       │   ├── thumbprint.sh
+│       │   └── variables.tf
+│       └── vpc
+│           ├── output.tf
+│           ├── variables.tf
+│           └── vpc.tf
+└── k8s
+│ └── helm-rails
+│    ├── Chart.yaml
+│    ├── README.md
+│    ├── charts
+│    ├── environments
+│    │   ├── dev.yaml
+│    │   └── local.yaml
+│    ├── templates
+│    │   ├── NOTES.txt
+│    │   ├── _helpers.tpl
+│    │   ├── deployment.yaml
+│    │   └── service.yaml
+│    └── values.yaml
 └── rails
     └── hello_world
         ├── Dockerfile
@@ -75,7 +125,7 @@ this project contains 3 big folders:
 - k8s
 - rails
 
-## rails
+## 2. rails <a name="rails"></a>
 rails folder contains a basic rails application that only show in the view "hello world" and some values of the controller 
 - static variable
 - environment variable
@@ -93,7 +143,7 @@ this folder contains a readme with the details how the rails app was created and
 ![rails hello world app](images/rails_hello.png)
  
 
-## k8s
+## 3. k8s <a name="k8s"></a>
 k8s folder contains the basic helm chart that contains all the configuration to allow a deployment and a service in kubernetes
 the variables by environment like dev, stage, qa, prod, etc. are stored into `environments` folder these yaml's goal are store the basic values by enviromnent like replica numbers, ecr repo, image tag name, etc. by environment
 
@@ -114,7 +164,7 @@ to deploy the helm chart use the next command
 helm install -f values.yaml --namespace default --values environments/dev.yaml local-rails .
 ```
 
-## Infra
+## 4. Infra <a name="infra"></a>
 
 this folder contains all the main goal of the challenge and here is stored all the terraform code and configuration to create and deploy the rails app to k8s
 
@@ -141,7 +191,7 @@ terraform {
 
 ```
 
-### ecr
+### 5. ecr <a name="ecr"></a>
 
 here is the terraform code to deploy an ECR repository in the AWS account
 
@@ -157,7 +207,7 @@ terraform plan -out "ecr.tfplan" --var-file="environments/dev.tfvars"
 terraform apply "ecr.tfplan"
 ```
 
-### build
+### 6. build <a name="build"></a>
 
 This terraform project allow the docker image build and push to a ECR registry.
 By default the rails image can be created with the docker command
@@ -175,7 +225,7 @@ terraform plan -out "build.tfplan" --var-file="environments/dev.tfvars"
 terraform apply "build.tfplan"
 ```
 
-### deploy
+### 7. deploy <a name="deploy"></a>
 the deployment use `helm_release` resource to deploy the rails helm chart
 this project use the environment files that are stored in the helm folder and the reference is defined in environments folder
 
@@ -217,7 +267,7 @@ terraform apply "deploy.tfplan"
 ```
 ![rails hello world local app](images/local-deployment.png)
 
-## Manage Multiple Environments and secrets 
+## Manage Multiple Environments and secrets <a name="mult-env"></a>
 
 For helm and terraform i used a `enviroment` folder where are stored all the keys/values; the goal of these files is only manage the environment global configuration for example the `replicaCount` of the deployments in EKS, application name like `rails-app-<environment>`.
 For terraform and example of manage the environments is the ECR repo created that contains the suffix of the environment defined in the `environment/dev.tfvars`
@@ -225,7 +275,7 @@ For terraform and example of manage the environments is the ECR repo created tha
 to manage the secrets like database users and password, can be used a configMap to setup as a environment variable in the deployment configuration, but something like AWS secrets manager can be better to allow the application download the secrets when the application start, but it depends on the rails application implement this feature
 
 
-## Tests
+## Tests <a name="tests"></a>
 
 in this iteration there are not any terraform test, it was only execute the next commands `terraform validate` `terraform fmt <files>`, `terraform plan` command is another way to validate if the terraform code is valid before execute the apply
 a unit testing can be implemented in the project with `Terratest` in my experience i never used unit tests for the infrastructure but i can create some unit test and it require go language knowledge.
@@ -342,7 +392,7 @@ Events:                   <none>
 
 ```
 
-## Additional Notes
+## Additional Notes <a name="additional"></a>
 
 a VPC and EKS cluster project were added in this project, i thought it could be necessary deploy this rails app into a live EKS cluster, i can do it but could you help to schedule a time window to turn on the cluster an when can be turned off?
 - The vpc, subnets and all the network configuration was deployed to a AWS account
